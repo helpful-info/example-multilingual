@@ -18,6 +18,9 @@ env:
   # Use the language-switcher to switch between Regions (set to 'true' / 'false')
   NG_USE_REGION_PER_LOCALE: 'true'
   #
+  # Enable Feedback-prompt on Sub-Category and Offer pages (set to 'true' / 'false')
+  NG_USE_FEEDBACK_PROMPT: 'true'
+  #
   # For demo-purpose only: A highly visible label to show instance name/version
   ENV_NAME: 'Example Multilingual'
   #
@@ -26,7 +29,7 @@ env:
   # ###########################################################################
   #
   # A (short) name, visible in the top (navigation-)bar and in the browser's tab/window-title (and search-engine results)
-  TXT_APP_NAME: 'Helpful Multilingual Example'
+  TXT_APP_NAME: 'Helpful \n Information'
   # An absolute/data-URL to an image, visible in the top (navigation-)bar
   TXT_APP_LOGO_URL: 'https://avatars.githubusercontent.com/u/136691409'
   # The first heading, (only) visible on the main-page
@@ -39,11 +42,39 @@ env:
     اختر لغتك:\n
     Choose your language:\n
     Kies je taal:\n
+  #
+  # An (optional) notice on the top of the screen, can be overwritten on sub-pages per-region by each region's sheet.
+  TXT_MAIN_PAGE_NOTICE: ''
+  #
+  # An (optional) "About"-page
+  # Can be multiple-lines of Markdown syntax or contain some HTML. Newlines need to be specified with `\n` or `<br />`.
+  TXT_PAGE_ABOUT: >-
+    ## About \n
+    \n
+    This is an example of a _*multi-lingual*_ [Helpful Information App](https://github.com/rodekruis/helpful-information#readme).\n
+    \n
+    Some features are enabled and configured differently in this instance.  \n
+    The configuration of _**this** specific_ instance, can be found in [its own GitHub-repository](https://github.com/helpful-info/example-multilingual/blob/main/.github/workflows/deploy-github-pages.yml).\n
+    \n
+    There is also a website of a [default example](https://helpful-info.github.io/example).\n
+  #
+  # An (optional) "Privacy"-page
+  # Can be multiple-lines of Markdown syntax or contain some HTML. Newlines need to be specified with `\n` or `<br />`.
+  TXT_PAGE_PRIVACY: >-
+    ## Privacy \n
+    \n
+    We do not collect any personal information or location data on this website.  \n
+    Feel free to explore our site anonymously.\n
+    \n
+    The Helpful Information Team\n
     \n
   #
-  # An (optional) notice on the bottom of the screen, can be overwritten by the sheet.
-  # Will override the (optional) bottom-right "Contact"-buttons from the sheet.
-  TXT_MAIN_PAGE_NOTICE: ''
+  # An (optional) footer at the bottom of the screen, can be overwritten on sub-pages per-region by each region's sheet.
+  TXT_MAIN_FOOTER: >-
+    **Helpful Information**  \n
+    \n
+    [About](/about)  \n
+    [Privacy](/privacy)  \n
   #
   # Contents of the 'error-page'
   #
@@ -123,10 +154,10 @@ jobs:
         run: 'echo "Please change the ENV configuration to real-world values." && exit 1'
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: 'package.json'
           cache-dependency-path: 'package.json'
