@@ -73,8 +73,8 @@ env:
   TXT_MAIN_FOOTER: >-
     **Helpful Information**  \n
     \n
-    [About](/about)  \n
-    [Privacy](/privacy)  \n
+    [About](/example/about)  \n
+    [Privacy](/example/privacy)  \n
   #
   # Contents of the 'error-page'
   #
