@@ -219,6 +219,9 @@ jobs:
           mkdir -p www/data/test-sheet-id-2-language-nl/
           mv helpful-information/data/test-sheet-id-2-language-nl/values/ www/data/test-sheet-id-2-language-nl/
 
+      - name: Add generic files
+        run: 'cp -r ./public/. www/'
+
       - name: Add 404.html
         run: 'cp www/index.html www/404.html'
 
