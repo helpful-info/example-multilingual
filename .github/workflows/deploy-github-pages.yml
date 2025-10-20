@@ -197,6 +197,7 @@ jobs:
           GOOGLE_SHEETS_API_KEY: ''
           GOOGLE_SHEETS_API_URL: '/example-multilingual/data'
           MATOMO_CONNECTION_STRING: ${{ vars.MATOMO_CONNECTION_STRING }}
+          GOATCOUNTER_CONNECTION_STRING: ${{ vars.GOATCOUNTER_CONNECTION_STRING }}
           AI_CONNECTION_STRING: ${{ vars.AI_CONNECTION_STRING }}
 
       - name: Use Local Data
