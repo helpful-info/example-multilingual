@@ -239,7 +239,7 @@ jobs:
         run: 'cp www/index.html www/404.html'
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           enablement: true
 
