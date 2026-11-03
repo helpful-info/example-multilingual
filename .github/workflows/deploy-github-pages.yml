@@ -187,32 +187,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: 'package.json'
-          cache-dependency-path: 'package.json'
-          cache: 'npm'
-
-      - name: Install local
-        run: 'npm install --no-save'
-
-      - name: Set-up helpful-information
-        run: 'mv node_modules/helpful-information ./'
-
-      - name: Install helpful-information
-        working-directory: 'helpful-information'
-        run: 'npm ci --no-fund --no-audit'
-        env:
-          HUSKY: 0
-
       - name: Build
-        working-directory: 'helpful-information'
-        # NOTE: When the instance will be run on a custom (sub-)domain, remove the `--base-href`-flag+value.
-        run: 'npm run build:production -- --output-path=../www --base-href=/${GITHUB_REPOSITORY#*/}/'
+        uses: helpful-info/build@main
         env:
           GOOGLE_SHEETS_API_KEY: ''
           GOOGLE_SHEETS_API_URL: '/example-multilingual/data'
+        with:
+          includePublicFiles: true
 
       - name: Use Local Data
         run: |
@@ -245,12 +226,6 @@ jobs:
           cd ../../../../
           mkdir -p www/data/test-sheet-id-2-language-nl/
           mv helpful-information/data/test-sheet-id-2-language-nl/values/ www/data/test-sheet-id-2-language-nl/
-
-      - name: Add generic files
-        run: 'cp -r ./public/. www/'
-
-      - name: Add 404.html
-        run: 'cp www/index.html www/404.html'
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v6
