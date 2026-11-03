@@ -15,6 +15,14 @@ env:
   # When using "Q&A"s, you can enable search: (set to 'true' / 'false')
   NG_USE_Q_AND_A_SEARCH: 'true'
   #
+  # (Optional) Search-feature via API
+  #   - Requires: NG_USE_Q_AND_A_SEARCH to be 'true'!
+  #   - Requires: SEARCH_API to be set to the URL of the Search-API used. (See below; Set by default)
+  NG_USE_SEARCH_VIA_API: 'false'
+  #
+  # (Optional) URL of the HIA-Search-API. Start with 'https://'
+  SEARCH_API: '${{ vars.SEARCH_API }}'
+  #
   # Enable Feedback-prompt on Sub-Category and Offer pages (set to 'true' / 'false')
   NG_USE_FEEDBACK_PROMPT: 'true'
   #
@@ -125,6 +133,17 @@ env:
     test-sheet-id-3-language-ar,
     test-sheet-id-1,
     test-sheet-id-2-language-nl,
+  #
+  # ###########################################################################
+  # Analytics/Monitoring:
+  # ###########################################################################
+  #
+  # Matomo;
+  MATOMO_CONNECTION_STRING: '${{ vars.MATOMO_CONNECTION_STRING }}'
+  # GoatCounter;
+  GOATCOUNTER_CONNECTION_STRING: '${{ vars.GOATCOUNTER_CONNECTION_STRING }}'
+  # Azure Monitor / ApplicationInsights;
+  AI_CONNECTION_STRING: '${{ vars.AI_CONNECTION_STRING }}'
 
 # #############################################################################
 #
@@ -168,37 +187,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: 'package.json'
-          cache-dependency-path: 'package.json'
-          cache: 'npm'
-
-      - name: Install local
-        run: 'npm install --no-save'
-
-      - name: Set-up helpful-information
-        run: 'mv node_modules/helpful-information ./'
-
-      - name: Install helpful-information
-        working-directory: 'helpful-information'
-        run: 'npm ci --no-fund --no-audit'
-        env:
-          HUSKY: 0
-
       - name: Build
-        working-directory: 'helpful-information'
-        # NOTE: When the instance will be run on a custom (sub-)domain, remove the `--base-href`-flag+value.
-        run: 'npm run build:production -- --output-path=../www --base-href=/${GITHUB_REPOSITORY#*/}/'
+        uses: helpful-info/build@main
         env:
-          # See all variables: https://github.com/rodekruis/helpful-information/blob/main/.env.example
-          NG_PRODUCTION: 'true'
           GOOGLE_SHEETS_API_KEY: ''
           GOOGLE_SHEETS_API_URL: '/example-multilingual/data'
-          MATOMO_CONNECTION_STRING: ${{ vars.MATOMO_CONNECTION_STRING }}
-          GOATCOUNTER_CONNECTION_STRING: ${{ vars.GOATCOUNTER_CONNECTION_STRING }}
-          AI_CONNECTION_STRING: ${{ vars.AI_CONNECTION_STRING }}
+        with:
+          includePublicFiles: true
 
       - name: Use Local Data
         run: |
@@ -232,22 +227,16 @@ jobs:
           mkdir -p www/data/test-sheet-id-2-language-nl/
           mv helpful-information/data/test-sheet-id-2-language-nl/values/ www/data/test-sheet-id-2-language-nl/
 
-      - name: Add generic files
-        run: 'cp -r ./public/. www/'
-
-      - name: Add 404.html
-        run: 'cp www/index.html www/404.html'
-
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           enablement: true
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: 'www'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
