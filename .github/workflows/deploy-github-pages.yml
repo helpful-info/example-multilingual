@@ -20,6 +20,9 @@ env:
   #   - Requires: SEARCH_API to be set to the URL of the Search-API used. (See below; Set by default)
   NG_USE_SEARCH_VIA_API: 'false'
   #
+  # (Optional) URL of the HIA-Search-API. Start with 'https://'
+  SEARCH_API: '${{ vars.SEARCH_API }}'
+  #
   # Enable Feedback-prompt on Sub-Category and Offer pages (set to 'true' / 'false')
   NG_USE_FEEDBACK_PROMPT: 'true'
   #
@@ -130,6 +133,17 @@ env:
     test-sheet-id-3-language-ar,
     test-sheet-id-1,
     test-sheet-id-2-language-nl,
+  #
+  # ###########################################################################
+  # Analytics/Monitoring:
+  # ###########################################################################
+  #
+  # Matomo;
+  MATOMO_CONNECTION_STRING: '${{ vars.MATOMO_CONNECTION_STRING }}'
+  # GoatCounter;
+  GOATCOUNTER_CONNECTION_STRING: '${{ vars.GOATCOUNTER_CONNECTION_STRING }}'
+  # Azure Monitor / ApplicationInsights;
+  AI_CONNECTION_STRING: '${{ vars.AI_CONNECTION_STRING }}'
 
 # #############################################################################
 #
@@ -197,14 +211,8 @@ jobs:
         # NOTE: When the instance will be run on a custom (sub-)domain, remove the `--base-href`-flag+value.
         run: 'npm run build:production -- --output-path=../www --base-href=/${GITHUB_REPOSITORY#*/}/'
         env:
-          # See all variables: https://github.com/rodekruis/helpful-information/blob/main/.env.example
-          NG_PRODUCTION: 'true'
           GOOGLE_SHEETS_API_KEY: ''
           GOOGLE_SHEETS_API_URL: '/example-multilingual/data'
-          SEARCH_API: ${{ vars.SEARCH_API }}
-          MATOMO_CONNECTION_STRING: ${{ vars.MATOMO_CONNECTION_STRING }}
-          GOATCOUNTER_CONNECTION_STRING: ${{ vars.GOATCOUNTER_CONNECTION_STRING }}
-          AI_CONNECTION_STRING: ${{ vars.AI_CONNECTION_STRING }}
 
       - name: Use Local Data
         run: |
